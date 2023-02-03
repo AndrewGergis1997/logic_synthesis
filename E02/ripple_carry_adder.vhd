@@ -52,14 +52,14 @@ end ripple_carry_adder;
 -- Architecture defines an implementation for an entity
 
 architecture gate of ripple_carry_adder is
-  signal c : std_logic := '0';
-  signal d : std_logic := '0';
-  signal e : std_logic := '0';
-  signal f : std_logic := '0';
-  signal g : std_logic := '0';
-  signal h : std_logic := '0';
-  signal carry_ha : std_logic := '0';
-  signal carry_fa : std_logic := '0';
+  signal c : std_logic;
+  signal d : std_logic;
+  signal e : std_logic;
+  signal f : std_logic;
+  signal g : std_logic;
+  signal h : std_logic;
+  signal carry_ha : std_logic;
+  signal carry_fa : std_logic;
   
   
   -- TODO: Add your internal signal declarations here
