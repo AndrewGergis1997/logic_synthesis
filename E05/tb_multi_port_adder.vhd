@@ -46,7 +46,7 @@ architecture testbench of tb_multi_port_adder is -- Architecture of test bench
   signal clk             : std_logic := '0';        -- Low clk signal
   signal rst_n           : std_logic := '0';        -- reset
   signal operands_r      : std_logic_vector(15 downto 0);      -- Registered input of DUV
-  signal sum             : std_logic_vector(operand_width_g - 1 downto 0); -- output of the DUV
+  signal sum             : std_logic_vector(operand_width_g  downto 0); -- output of the DUV
   signal output_valid_r  : std_logic_vector(duv_delay_c downto 0) := (others => '0');  -- delay compensation
 
   -- Defining text files
@@ -54,6 +54,17 @@ architecture testbench of tb_multi_port_adder is -- Architecture of test bench
   file input_f        : text open read_mode is "input.txt";                -- reading in input.txt-file
   file ref_results_f  : text open read_mode  is "ref_results_4b.txt";
   file output_f       : text open write_mode is "output.txt";
+
+  component multi_port_adder
+  generic (
+    operand_width_g   :     integer;  
+    num_of_operands_g :     integer);  
+  port (
+    clk               : in  std_logic;  
+    rst_n             : in  std_logic;  
+    operands_in       : in  std_logic_vector(((operand_width_g * num_of_operands_g) - 1) downto 0);  
+    sum_out           : out std_logic_vector((operand_width_g - 1) downto 0));  
+end component;
 
 begin      --Begin Test Bench
   -- Clock generator
@@ -63,9 +74,9 @@ begin      --Begin Test Bench
   rst_n <= '1' after 4 * clock_period_c;
 
   -- DUV instance of multiport adder and mapping the ports
-  u_multi_port_adder : entity work.multi_port_adder
+  DUV : multi_port_adder
     generic map (
-      operand_width_g => operand_width_g,
+      operand_width_g => operand_width_g + 1,
       num_of_operands_g => operand_count_c
     )
     port map (
