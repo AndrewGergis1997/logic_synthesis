@@ -52,7 +52,7 @@ architecture testbench of tb_multi_port_adder is -- Architecture of test bench
   -- Defining text files
 
   file input_f        : text open read_mode is "input.txt";                -- reading in input.txt-file
-  file ref_results_f  : text open read_mode is "ref_results_4b.txt";
+  file ref_results_f  : text open read_mode  is "ref_results_4b.txt";
   file output_f       : text open write_mode is "output.txt";
 
 begin      --Begin Test Bench
@@ -92,7 +92,8 @@ begin      --Begin Test Bench
       
     elsif rising_edge(clk) then
 
-      if output_valid_r(duv_delay_c) = '0' then
+      output_valid_r <= output_valid_r((DUV_delay_c - 1) downto 0) & '1';
+
         if not endfile(input_f) then
 
           -- Read four integer values from the input file
@@ -100,16 +101,11 @@ begin      --Begin Test Bench
 
           for i in 0 to operand_count_c - 1 loop
             read(value_v, values_v(i));
+            operands_r(((operand_count_c * (i + 1)) - 1) downto (operand_count_c * i)) <= std_logic_vector(to_signed(values_v(i), 4));
           end loop;
-
-          operands_r <= std_logic_vector(to_signed(values_v(0), 4)) &
-                        std_logic_vector(to_signed(values_v(1), 4)) &
-                        std_logic_vector(to_signed(values_v(2), 4)) &
-                        std_logic_vector(to_signed(values_v(3), 4));
-          output_valid_r <= '1' & output_valid_r(duv_delay_c - 1 downto 0);
         end if;
       end if;
-    end if;
+    
   end process input_reader;
 
   checker: process(clk)
@@ -132,12 +128,12 @@ begin -- Checker
 
                 assert ((to_integer(signed(sum))) = value_v) report "Unexpected sum value" severity error;
 
-                --  Writting to Output file
+                --  Writing to Output file
                 write(output_line_v, to_integer(signed(sum)));
                 writeline(output_f, output_line_v);
             else
                 report "Simulation done" severity note;
-                assert false report "Reference file EOF reached" severity note;
+                assert false report "Reference file EOF reached" severity failure;
             end if;
         end if;
     end if;
