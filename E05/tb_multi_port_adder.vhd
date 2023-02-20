@@ -76,7 +76,7 @@ begin      --Begin Test Bench
   -- DUV instance of multiport adder and mapping the ports
   DUV : multi_port_adder
     generic map (
-      operand_width_g => operand_width_g + 1,
+      operand_width_g => (operand_width_g + 1),
       num_of_operands_g => operand_count_c
     )
     port map (

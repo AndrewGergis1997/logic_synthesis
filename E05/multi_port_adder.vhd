@@ -28,12 +28,12 @@ entity multi_port_adder is
 
   generic (
     operand_width_g   : integer := 16;    -- generic parameter with integer type with default value 16
-    num_of_operands_g : integer := 4);    -- generic parameter with integer type with default value 4
+    num_of_operands_g : integer := 14);    -- generic parameter with integer type with default value 4
 
   port (
     clk         : in  std_logic;          -- clock signal
     rst_n       : in  std_logic;          -- active-low reset
-    operands_in : in  std_logic_vector( 15 downto 0);  -- inputs sum
+    operands_in : in  std_logic_vector((operand_width_g * num_of_operands_g) - 1 downto 0);  -- inputs sum
     sum_out     : out std_logic_vector((operand_width_g - 1) downto 0)                         -- output sum
     );
 end entity multi_port_adder;
