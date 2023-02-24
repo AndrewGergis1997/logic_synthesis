@@ -68,9 +68,8 @@ begin
             direction <= '1';   -- change the direction when value_r = min_c
           else
             value_r <= std_logic_vector(signed(value_r) - to_signed(step_g, width_g));   --Decrementing with the step value
-            value_out <= value_r;
             end if;
-
+            value_out <= value_r;
         end if;
         
       else  --Reset all the signals when sync is low
