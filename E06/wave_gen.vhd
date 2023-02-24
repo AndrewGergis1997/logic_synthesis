@@ -69,18 +69,17 @@ begin
           else
             value_r <= std_logic_vector(signed(value_r) - to_signed(step_g, width_g));   --Decrementing with the step value
             end if;
-            value_out <= value_r;
+            -- value_out <= value_r;
         end if;
         
       else  --Reset all the signals when sync is low
-       
+
         value_r <= (others => '0');
         direction <= '1';
-        
       end if;
-      value_out <= value_r;
+      
     end if;
 	
   end process;
- 
+  value_out <= value_r;
 end rtl;  
