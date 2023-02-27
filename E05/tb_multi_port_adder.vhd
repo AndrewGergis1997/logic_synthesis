@@ -6,7 +6,7 @@
 -- Author     : Group: 17, Poojith Dasari, Andrew Gergis
 -- Company    : TUT
 -- Created    : 2023-02-16
--- Last update: 2023-02-16
+-- Last update: 2023-02-27
 -- Platform   : 
 -- Standard   : VHDL'93/02
 -------------------------------------------------------------------------------
@@ -16,7 +16,7 @@
 -------------------------------------------------------------------------------
 -- Revisions  :
 -- Date        Version  Author  Description
--- 2023-02-02  1.0      qqpoda	Created
+-- 2023-02-27  2.0      qqpoda	Created
 -------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
@@ -45,14 +45,14 @@ architecture testbench of tb_multi_port_adder is -- Architecture of test bench
 
   signal clk             : std_logic := '0';        -- Low clk signal
   signal rst_n           : std_logic := '0';        -- reset
-  signal operands_r      : std_logic_vector(15 downto 0);      -- Registered input of DUV
-  signal sum             : std_logic_vector(operand_width_g  downto 0); -- output of the DUV
+  signal operands_r      : std_logic_vector((operand_width_g * operand_count_c) - 1 downto 0);      -- Registered input of DUV
+  signal sum             : std_logic_vector(operand_width_g-1  downto 0); -- output of the DUV
   signal output_valid_r  : std_logic_vector(duv_delay_c downto 0) := (others => '0');  -- delay compensation
 
   -- Defining text files
 
   file input_f        : text open read_mode is "input.txt";                -- reading in input.txt-file
-  file ref_results_f  : text open read_mode  is "ref_results_4b.txt";
+  file ref_results_f  : text open read_mode  is "ref_results.txt";
   file output_f       : text open write_mode is "output.txt";
 
   component multi_port_adder
@@ -76,7 +76,7 @@ begin      --Begin Test Bench
   -- DUV instance of multiport adder and mapping the ports
   DUV : multi_port_adder
     generic map (
-      operand_width_g => (operand_width_g + 1),
+      operand_width_g => operand_width_g,
       num_of_operands_g => operand_count_c
     )
     port map (
@@ -96,8 +96,6 @@ begin      --Begin Test Bench
   begin -- Process Begin
 
     if rst_n = '0' then         -- Starting with Asynchronous active low reset 
-
-
       operands_r <= (others => '0');
       output_valid_r <= (others => '0');
       
@@ -112,7 +110,7 @@ begin      --Begin Test Bench
 
           for i in 0 to operand_count_c - 1 loop
             read(value_v, values_v(i));
-            operands_r(((operand_count_c * (i + 1)) - 1) downto (operand_count_c * i)) <= std_logic_vector(to_signed(values_v(i), 4));
+            operands_r(((operand_width_g * (i + 1)) - 1) downto (operand_width_g * i)) <= std_logic_vector(to_signed(values_v(i), operand_width_g));
           end loop;
         end if;
       end if;
@@ -135,16 +133,14 @@ begin -- Checker
               -- Reading from file
                 readline(ref_results_f, line_v);
                 read(line_v, value_v);
-
+              --  Writing to Output file
+                write(output_line_v, to_integer(signed(sum)));
+                writeline(output_f, output_line_v);
 
                 assert ((to_integer(signed(sum))) = value_v) report "Unexpected sum value" severity error;
 
-                --  Writing to Output file
-                write(output_line_v, to_integer(signed(sum)));
-                writeline(output_f, output_line_v);
             else
-                report "Simulation done" severity note;
-                assert false report "Reference file EOF reached" severity failure;
+                assert false report "Simulation done" severity failure;
             end if;
         end if;
     end if;

@@ -2,11 +2,11 @@
 -- Title      : Exercise 5
 -- Project    : 
 -------------------------------------------------------------------------------
--- File       : tb_multiport_adder.vhd
+-- File       : multiport_adder.vhd
 -- Author     : Group: 17, Poojith Dasari, Andrew Gergis
 -- Company    : TUT
 -- Created    : 2023-02-16
--- Last update: 2023-02-16
+-- Last update: 2023-02-27
 -- Platform   : 
 -- Standard   : VHDL'93/02
 -------------------------------------------------------------------------------
@@ -16,7 +16,7 @@
 -------------------------------------------------------------------------------
 -- Revisions  :
 -- Date        Version  Author  Description
--- 2023-02-02  1.0      qqpoda	Created
+-- 2023-02-27  2.0      qqpoda	Created
 -------------------------------------------------------------------------------
 
 library ieee;
@@ -28,7 +28,7 @@ entity multi_port_adder is
 
   generic (
     operand_width_g   : integer := 16;    -- generic parameter with integer type with default value 16
-    num_of_operands_g : integer := 14);    -- generic parameter with integer type with default value 4
+    num_of_operands_g : integer := 4);    -- generic parameter with integer type with default value 4
 
   port (
     clk         : in  std_logic;          -- clock signal
