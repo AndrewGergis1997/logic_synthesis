@@ -50,26 +50,24 @@ begin
   begin
 
     if rst_n = '0' then
-
+      value_r <= (others => '0'); -- Reset value_r immediately on reset
+      direction <= '1'; -- Reset direction immediately on reset
     elsif (rising_edge(clk)) then
 
       if (sync_clear_n_in = '1') then       --checking when sync is high then wave is generated
       
         if direction = '1' then             -- checking the direction of wave - forward(1) or backward(0)
           -- Comparing the value_r with max_c/min_c before incrementing or decrementing with step avoids overflow
-          if (to_integer(signed(value_r)) = max_c) then 
-            direction <= '0';        -- change the direction when value_r = max_c
-          else
-            value_r <= std_logic_vector(signed(value_r) + to_signed(step_g, width_g));   --incrementing with the step value
+          if (to_integer(signed(value_r)) = max_c - step_g) then 
+            direction <= '0';        -- change the direction when value_r = max_c - step_g
+          end if;
+          value_r <= std_logic_vector(signed(value_r) + to_signed(step_g, width_g));   --incrementing with the step value
             
-            end if;
         else -- if direction = 0
-          if (to_integer(signed(value_r)) = min_c) then
-            direction <= '1';   -- change the direction when value_r = min_c
-          else
-            value_r <= std_logic_vector(signed(value_r) - to_signed(step_g, width_g));   --Decrementing with the step value
-            end if;
-            -- value_out <= value_r;
+          if (to_integer(signed(value_r)) = min_c + step_g) then
+            direction <= '1';   -- change the direction when value_r = min_c + step_g
+          end if;
+          value_r <= std_logic_vector(signed(value_r) - to_signed(step_g, width_g));   --Decrementing with the step value
         end if;
         
       else  --Reset all the signals when sync is low
@@ -82,4 +80,4 @@ begin
 	
   end process;
   value_out <= value_r;
-end rtl;  
+end rtl; 
