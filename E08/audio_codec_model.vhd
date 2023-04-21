@@ -99,16 +99,18 @@ architecture rtl of audio_codec_model is
 		next_state_r <= read_left;
 	elsif(present_state_r = read_left) and (aud_lrclk_in ='0') then
 		next_state_r <= read_right;
+		value_left_out  <= left_data_r;
 	elsif(present_state_r = read_right) and (aud_lrclk_in ='1') then
 		next_state_r <= read_left;
+		value_right_out <= right_data_r;
 	else
 	next_state_r <= present_state_r;
 	end if;
 
 
   end process  next_state_logic;
-  value_left_out  <= left_data_r;
-  value_right_out <= right_data_r;
+
+  
 
 end rtl;	
 	 
