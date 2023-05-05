@@ -220,14 +220,17 @@ begin --testbench
         end if;
     end process fsm_proc;
 
-    -----------------------------------------------------------------------------
-    -- Asserts for verification
-    -----------------------------------------------------------------------------
-    --SDAT should never contain X=5 
-    assert sdat /= 'X' report "Three state bus in state X" severity error;
-    --End of stmulation, but not during the reset
-    assert finished = '0' or rst_n = '0' report "SimuLation done" severity failure;
+  -----------------------------------------------------------------------------
+  -- Asserts for verification
+  -----------------------------------------------------------------------------
 
+  -- SDAT should never contain X:s.
+  assert sdat /= 'X' report "Three state bus in state X" severity error;
+
+  -- End of simulation, but not during the reset
+  assert finished = '0' or rst_n = '0' report
+    "Simulation done" severity failure;
+    
 end testbench;
                 
                     
