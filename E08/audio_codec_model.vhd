@@ -59,8 +59,7 @@ architecture rtl of audio_codec_model is
 	left_index_r  <= data_width_g-1;
 	left_data_r     <= (others => '0');
 	right_data_r    <= (others => '0');
-	value_right_out <= (others => '0');
-	value_left_out  <= (others => '0');
+	
 	
 	elsif aud_bclk_in'event and aud_bclk_in = '1' then
 
@@ -99,6 +98,10 @@ architecture rtl of audio_codec_model is
     
 	if(present_state_r = wait_input) and (aud_lrclk_in ='1') then
 		next_state_r <= read_left;
+	elsif(present_state_r = wait_input) and (aud_lrclk_in ='0') then
+		next_state_r <= present_state_r;
+		value_right_out <= (others => '0');
+		value_left_out  <= (others => '0');
 	elsif(present_state_r = read_left) and (aud_lrclk_in ='0') then
 		next_state_r <= read_right;
 		value_left_out  <= left_data_r;
