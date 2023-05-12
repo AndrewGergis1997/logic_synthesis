@@ -1,0 +1,44 @@
+The amounts and the percentages of
+
+       Utiliz   Avai        %
+1- LUT	429	53200	0.80639094
+2- FF	338	106400	0.31766918
+3- IO	16	125	12.8
+4- PLL	1	4	25.0
+
+
+The division of resource usage block by block
+			  
+1- i2c bus controller	74  / 63  / 25
+2- a/ wave 1		23  / 17  / 7
+   b/ wave 2 		39  / 17  / 10
+   c/ wave 3		22  / 16  / 7
+   d/ wave 4		36  / 15  / 11
+3- multiport adder	17  / 47  / 16
+4- audio ctrl		213 / 147 / 97
+
+
+The requirement period (ns) and slack (ns) of both clocks' 
+max delay paths
+
+clk_out1
+Requirement clock period = 20.000 ns
+Worst Negative Slack 	 = 15.712 ns		
+
+clk_out2
+Requirement clock period = 81.379 ns
+Worst Negative Slack	 = 72.686 ns
+
+
+From the values you got, calculate the minimum clock period
+ (ns) and the maximum clock frequency (MHz)
+
+clk_out1 minimum clock period = 20.000 - 15.712 = 4.288 ns
+maximum clock frequency = 409.836 MHz
+
+clk_out2 minimum clock period = 81.379 - 72.686 = 8.693 ns
+maximum clock frequency = 230.07  MHz
+
+
+Did you manage to do the test run succesfully with your own synthesizer? If not, what happened and what did not happen?
+- Yes we did use our own synthesizer
