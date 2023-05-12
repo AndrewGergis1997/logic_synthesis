@@ -240,7 +240,6 @@ begin --testbench
         end if;
     end process fsm_proc;
 
-<<<<<<< HEAD
 
   -- Asserts for verification
   verify_data_proc : process(finished, received_bytes_r)
@@ -292,12 +291,6 @@ begin --testbench
       end loop;
     end if;
   end process verify_data_proc;
-=======
-  -----------------------------------------------------------------------------
-  -- Asserts for verification
-  -----------------------------------------------------------------------------
-
->>>>>>> 481ce565297e2ece8fee9982bdbd96e025afb018
   -- SDAT should never contain X:s.
   assert sdat /= 'X' report "Three state bus in state X" severity error;
 
